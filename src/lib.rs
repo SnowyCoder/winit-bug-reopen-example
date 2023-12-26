@@ -5,6 +5,8 @@ use log::trace;
 use wgpu::TextureFormat;
 use wgpu::{Adapter, Device, Instance, PipelineLayout, Queue, RenderPipeline, ShaderModule};
 
+use winit::event::KeyEvent;
+use winit::keyboard::{Key, NamedKey};
 use winit::{
     event::{Event, WindowEvent},
     event_loop::{EventLoop, EventLoopBuilder, EventLoopWindowTarget},
@@ -266,7 +268,9 @@ fn run(event_loop: EventLoop<()>) {
                 }
             }
             Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
+                event: WindowEvent::CloseRequested |
+                // Android back button is passed to the app as a BrowserBack button!
+                WindowEvent::KeyboardInput { event: KeyEvent { logical_key: Key::Named(NamedKey::BrowserBack), ..}, ..},
                 ..
             } => event_loop.exit(),
             Event::WindowEvent { event: _, .. } => {
